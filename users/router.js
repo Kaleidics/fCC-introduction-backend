@@ -6,7 +6,7 @@ const jsonParser = bodyParser.json();
 
 // REGISTER NEW USER
 router.post("/register", jsonParser, (req, res) => {
-    const requiredFields = ["username", "password"];
+    const requiredFields = ["email", "password"];
     const missingField = requiredFields.find(field => !(field in req.body));
 
     if (missingField) {
@@ -18,7 +18,7 @@ router.post("/register", jsonParser, (req, res) => {
         });
     }
 
-    const stringFields = ["username", "password"];
+    const stringFields = ["email", "password"];
     const nonStringField = stringFields.find(field => field in req.body && typeof req.body[field] !== "string");
 
     if (nonStringField) {
@@ -30,7 +30,7 @@ router.post("/register", jsonParser, (req, res) => {
         });
     }
 
-    const explicityTrimmedFields = ["username", "password"];
+    const explicityTrimmedFields = ["email", "password"];
     const nonTrimmedField = explicityTrimmedFields.find(field => req.body[field].trim() !== req.body[field]);
 
     if (nonTrimmedField) {
@@ -42,18 +42,18 @@ router.post("/register", jsonParser, (req, res) => {
         });
     }
 
-    let { username, password, firstname, lastname, overview } = req.body;
+    let { email, password, firstname, lastname, introduction } = req.body;
 
-    return User.find({ username })
+    return User.find({ email })
         .countDocuments()
         .then(count => {
             if (count > 0) {
-                // There is an existing user with the same username
+                // There is an existing user with the same email
                 return Promise.reject({
                     code: 422,
                     reason: "ValidationError",
-                    message: "name already taken",
-                    location: "name"
+                    message: "email already taken",
+                    location: "email"
                 });
             }
             // If there is no existing user, hash the password
@@ -61,11 +61,11 @@ router.post("/register", jsonParser, (req, res) => {
         })
         .then(hash => {
             return User.create({
-                username,
+                email,
                 password: hash,
                 firstname,
                 lastname,
-                overview
+                introduction
             });
         })
         .then(user => {

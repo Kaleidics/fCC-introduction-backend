@@ -17,8 +17,8 @@ router.get("/all", (req, res) => {
 });
 
 router.post("/", [jsonParser, jwtAuth], (req, res) => {
-    console.log(req.user.username);
-    User.findOne({ username: req.user.username })
+    console.log(req.user.email);
+    User.findOne({ email: req.user.email })
         .populate("poster", "fullname")
         .then(user => {
             console.log(req.body);
