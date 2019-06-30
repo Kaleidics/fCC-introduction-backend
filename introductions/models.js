@@ -12,6 +12,8 @@ const IntroductionSchema = mongoose.Schema({
 
 IntroductionSchema.methods.serialize = function() {
     return {
+        createdAt: this.createdAt || "",
+        poster: this.poster || "",
         title: this.title || "",
         summary: this.summary || "",
         topics: this.topics || []
