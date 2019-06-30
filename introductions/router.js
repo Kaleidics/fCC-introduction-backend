@@ -42,4 +42,21 @@ router.post("/", [jsonParser, jwtAuth], (req, res) => {
         });
 });
 
+router.put("/update/:id", [jsonParser, jwtAuth], (req, res) => {
+    Introduction.findByIdAndUpdate(req.params.id, { $set: { ...req.body } }, { new: true, useFindAndModify: false })
+        .then(intro => {
+            res.status(203).json(intro);
+        })
+        .catch(err => res.status(500).json({ message: err }));
+});
+
+router.delete("/post/:id", jwtAuth, (req, res) => {
+    Introduction.findByIdAndRemove(req.params.id, { useFindAndModify: false })
+        .then(intro => res.status(204).end())
+        .catch(err => {
+            console.error(4, err);
+            res.status(500).json({ message: "Internal server error" });
+        });
+});
+
 module.exports = { router };
