@@ -17,11 +17,7 @@ const { PORT, DATABASE_URL, LOCAL_ORIGIN, REMOTE_ORIGIN } = require("./config");
 const app = express();
 
 //CORS
-app.use(
-    cors({
-        origin: [LOCAL_ORIGIN, REMOTE_ORIGIN]
-    })
-);
+app.use(cors());
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
