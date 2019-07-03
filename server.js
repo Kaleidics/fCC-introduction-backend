@@ -12,14 +12,14 @@ const { router: introRouter } = require("./introductions");
 
 mongoose.Promise = global.Promise;
 
-const { PORT, DATABASE_URL, LOCAL_ORIGIN } = require("./config");
+const { PORT, DATABASE_URL, LOCAL_ORIGIN, REMOTE_ORIGIN } = require("./config");
 
 const app = express();
 
 //CORS
 app.use(
     cors({
-        origin: [LOCAL_ORIGIN]
+        origin: [LOCAL_ORIGIN, REMOTE_ORIGIN]
     })
 );
 
