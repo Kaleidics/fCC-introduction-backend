@@ -6,7 +6,7 @@ const jsonParser = bodyParser.json();
 
 // REGISTER NEW USER
 router.post("/register", jsonParser, (req, res) => {
-    const requiredFields = ["email", "password"];
+    const requiredFields = ["username", "password"];
     const missingField = requiredFields.find(field => !(field in req.body));
 
     if (missingField) {
@@ -18,7 +18,7 @@ router.post("/register", jsonParser, (req, res) => {
         });
     }
 
-    const stringFields = ["email", "password"];
+    const stringFields = ["username", "password"];
     const nonStringField = stringFields.find(field => field in req.body && typeof req.body[field] !== "string");
 
     if (nonStringField) {
@@ -30,7 +30,7 @@ router.post("/register", jsonParser, (req, res) => {
         });
     }
 
-    const explicityTrimmedFields = ["email", "password"];
+    const explicityTrimmedFields = ["username", "password"];
     const nonTrimmedField = explicityTrimmedFields.find(field => req.body[field].trim() !== req.body[field]);
 
     if (nonTrimmedField) {
@@ -42,9 +42,9 @@ router.post("/register", jsonParser, (req, res) => {
         });
     }
 
-    let { email, password, firstname, lastname, introduction } = req.body;
+    let { username, password, firstname, lastname, introduction } = req.body;
 
-    return User.find({ email })
+    return User.find({ username })
         .countDocuments()
         .then(count => {
             if (count > 0) {
@@ -61,7 +61,7 @@ router.post("/register", jsonParser, (req, res) => {
         })
         .then(hash => {
             return User.create({
-                email,
+                username,
                 password: hash,
                 firstname,
                 lastname,
